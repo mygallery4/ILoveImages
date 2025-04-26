@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>I Love Images</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      background-color: #222;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 2rem;
+    }
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      padding: 20px;
+      flex: 1;
+    }
+    .gallery img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .gallery img:hover {
+      transform: scale(1.05);
+    }
+    footer {
+      background-color: #222;
+      color: white;
+      text-align: center;
+      padding: 10px;
+      font-size: 0.9rem;
+    }
+
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.95);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+    }
+    .modal .close,
+    .modal .prev,
+    .modal .next {
+      position: absolute;
+      color: white;
+      font-size: 3rem;
+      background-color: rgba(0,0,0,0.5);
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      user-select: none;
+    }
+    .modal .close {
+      top: 20px;
+      right: 30px;
+      transform: none;
+    }
+    .modal .prev {
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .modal .next {
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* Ad Popup Styles */
+    #ad-popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.9);
+      color: white;
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    #ad-popup h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    #watch-ad-btn {
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      background-color: #ff4444;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <header>I Love Images</header>
+
+  <div class="gallery">
+    <img src="https://i.ibb.co/DD26wmKx/1.png" alt="Image 1">
+    <img src="https://i.ibb.co/351wRDGS/2.png" alt="Image 1">
+    <img src="https://i.ibb.co/Fq49WZkr/3.png" alt="Image 1">
+    <img src="https://i.ibb.co/yGT7yHs/4.png" alt="Image 1">
+    <img src="https://i.ibb.co/BVyrGNMb/5.png" alt="Image 1">
+    <img src="https://i.ibb.co/tw8DSb3P/6.png" alt="Image 1">
+    <img src="https://i.ibb.co/ch2N5SBK/7.png" alt="Image 1">
+    <img src="https://i.ibb.co/1YpJHkxF/8.png" alt="Image 1">
+    <img src="https://i.ibb.co/V5Ydw7k/9.png" alt="Image 1">
+    <img src="https://i.ibb.co/9mFbjZZR/10.png" alt="Image 1">
+    <img src="https://i.ibb.co/W8DDk5k/11.png" alt="Image 1">
+    <img src="https://i.ibb.co/v4YJ5QkV/12.png" alt="Image 1">
+    <img src="https://i.ibb.co/whztMyNz/13.png" alt="Image 1">
+    <img src="https://i.ibb.co/rK0VLwvM/14.png" alt="Image 1">
+    <img src="https://i.ibb.co/gMFMgYbj/15.png" alt="Image 1">
+    <img src="https://i.ibb.co/7dLN1g37/16.png" alt="Image 1">
+    <img src="https://i.ibb.co/7JGxZ2TM/17.png" alt="Image 1">
+    <img src="https://i.ibb.co/5gMSKwJL/18.png" alt="Image 1">
+    <img src="https://i.ibb.co/d0XHtQXW/19.png" alt="Image 1">
+    <img src="https://i.ibb.co/SD902KjZ/20.png" alt="Image 1">
+    <img src="https://i.ibb.co/QvrjnWQz/21.png" alt="Image 1">
+    <img src="https://i.ibb.co/tp2jVzFL/22.png" alt="Image 1">
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" id="modal">
+    <span class="close" id="close">&times;</span>
+    <span class="prev" id="prev">&#10094;</span>
+    <img id="modal-img" src="" alt="Full Image">
+    <span class="next" id="next">&#10095;</span>
+  </div>
+
+  <!-- Ad Popup -->
+  <div id="ad-popup">
+    <h2>Watch this ad to get this website for free</h2>
+    <button id="watch-ad-btn">Watch Ad</button>
+  </div>
+
+  <footer>
+    &copy; 2025 I Love Images. All rights reserved.
+  </footer>
+
+  <script>
+    const images = document.querySelectorAll('.gallery img');
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modal-img');
+    const closeBtn = document.getElementById('close');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    let currentIndex = 0;
+
+    function openModal(index) {
+      modal.style.display = 'flex';
+      modalImg.src = images[index].src;
+      currentIndex = index;
+    }
+
+    function closeModal() {
+      modal.style.display = 'none';
+    }
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      modalImg.src = images[currentIndex].src;
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % images.length;
+      modalImg.src = images[currentIndex].src;
+    }
+
+    images.forEach((img, index) => {
+      img.addEventListener('click', () => openModal(index));
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    prevBtn.addEventListener('click', showPrev);
+    nextBtn.addEventListener('click', showNext);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (modal.style.display === 'flex') {
+        if (e.key === 'ArrowRight') showNext();
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'Escape') closeModal();
+      }
+    });
+
+    // Ad Popup Logic
+    setTimeout(() => {
+      document.getElementById("ad-popup").style.display = "flex";
+    }, 17000); // show popup after 17 seconds
+
+    document.getElementById("watch-ad-btn").addEventListener("click", () => {
+      window.open("https://www.profitableratecpm.com/bbhjpv23g?key=0f085281b007b1186f4bd52e9d2ccbb2", "_blank"); // change this link
+      document.getElementById("ad-popup").style.display = "none";
+    });
+  </script>
+
+</body>
+</html>
